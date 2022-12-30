@@ -23,7 +23,7 @@ pip install mlcenter
 
 ## Usage
 
-[See example notebook](https://github.com/mlcenter-org/mlcenter/mlcenter/examples/01-Titanic.ipynb)
+[See example notebook](https://github.com/mlcenter-org/mlcenter/blob/main/examples/01-Titanic.ipynb)
 
 ```python
 
