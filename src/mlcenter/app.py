@@ -98,7 +98,7 @@ class MLCenterAPI:
     def download_artifacts_from_center(self, urls:list, download_path:str):
         
         return [
-            self.download_artifact(url, download_path)
+            self.download_artifact_from_center(url=url, download_path=download_path)
             for url in urls
         ]
         
@@ -112,12 +112,12 @@ class MLCenter(MLCenterAPI):
         super().__init__(MLCENTER_URL,MLCENTER_USERNAME,MLCENTER_PASSWORD)
         self.PROJECT_ID = PROJECT_ID
         
-    def create_experiment(self, project_id: str, experiment_name: str, experiment_description: str, experiment_tags: list, experiment_metrics: dict, experiment_hyperparameters: dict, experiment_requirements: str):
+    def create_experiment(self, experiment_name: str, experiment_description: str, experiment_tags: list, experiment_metrics: dict, experiment_hyperparameters: dict, experiment_requirements: str):
         
         experiment_tags = [str(x).replace(',','').strip() for x in experiment_tags]
         experiment_tags = ','.join(experiment_tags)
         
-        response = super().create_experiment(project_id, experiment_name, experiment_description, experiment_tags, experiment_metrics, experiment_hyperparameters, experiment_requirements)
+        response = super().create_experiment(self.PROJECT_ID, experiment_name, experiment_description, experiment_tags, experiment_metrics, experiment_hyperparameters, experiment_requirements)
         
         if response.status_code == 201:
             self.EXPERIMENT_ID = response.json().get('id')
@@ -134,17 +134,26 @@ class MLCenter(MLCenterAPI):
         
         
     def download_artifact(self, artifact_name: str, model_name:str, model_stage:str, download_path:str):
-        release_data = self.get_release_data(self.PROJECT_ID, model_name, model_stage)
+        release_data = self.get_release_data(project_id=self.PROJECT_ID, model_name=model_name, model_stage=model_stage)
+        if len(release_data) == 0:
+            raise ValueError(f'Please check in the UI if you have access to stage or if the model has artifacts')
+        if len(release_data) >= 1:
+            release_data = release_data[0]
+            
         artifacts = release_data.get('artifacts')
         for artifact in artifacts:
             if artifact.get('name') == artifact_name:
-                url = artifact.get('artifact')
+                url = artifact.get('url')
                 return super().download_artifact_from_center(url, download_path)
             
         raise ValueError(f'Artifact {artifact_name} not found')
     
     def sync_artifacts(self, model_name:str, model_stage:str, download_path:str):
-        release_data = self.get_release_data(self.PROJECT_ID, model_name, model_stage)
+        release_data = self.get_release_data(project_id=self.PROJECT_ID, model_name=model_name, model_stage=model_stage)
+        if len(release_data) == 0:
+            raise ValueError(f'Please check in the UI if you have access to stage or if the model has artifacts')
+        if len(release_data) >= 1:
+            release_data = release_data[0]
         artifacts = release_data.get('artifacts',[])
-        urls = [artifact.get('artifact') for artifact in artifacts]
-        return super().download_artifacts_from_center(urls, download_path)
+        urls = [artifact.get('url') for artifact in artifacts]
+        return super().download_artifacts_from_center(urls=urls, download_path=download_path)

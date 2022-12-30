@@ -1,1 +1,1 @@
-from app import MLCenter
+from .app import MLCenter
