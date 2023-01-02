@@ -57,3 +57,12 @@ Run `make` for help
     make test                # run pytest with coverage
     make build               # run `poetry build` to build source distribution and wheel
     make jupyter             # run the jupyter-lab server
+
+
+# License
+
+License: MIT
+
+# Contributors
+
+- cristianexer:  [GitHub](https://github.com/cristianexer) | [LinkedIn](https://www.linkedin.com/in/cristianexer/)
