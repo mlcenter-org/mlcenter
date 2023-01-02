@@ -6,8 +6,12 @@
 [![Documentation](https://readthedocs.org/projects/mlcenter/badge/?version=latest)](https://mlcenter.readthedocs.io/en/latest/?badge=latest)
 [![Updates](https://pyup.io/repos/github/cristianexer/mlcenter/shield.svg)](https://pyup.io/repos/github/cristianexer/mlcenter/)
 
-
 Python client for MLCenter MLOps Platform (https://mlcenter.org)
+
+
+## About MLCenter
+
+MLCenter is an Open Source MLOps Platform aiming to simplify tracking and promotion of Machine Learning models across different lifecycles.
 
 ## Installation
 
